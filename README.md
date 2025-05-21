@@ -23,3 +23,13 @@ license: Apache License 2.0
 ```bash
  git clone https://www.modelscope.cn/studios/Jz02070540/qwen-2.5-omni-realtime-chat.git
 ```
+#### 本地运行 需设置环境变量
+```txt
+MODE=UI
+```
+#### 加载环境变量
+```python
+load_dotenv(/path/to/.env)
+```
+
+
