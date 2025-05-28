@@ -1,35 +1,35 @@
----
-# 详细文档见https://modelscope.cn/docs/%E5%88%9B%E7%A9%BA%E9%97%B4%E5%8D%A1%E7%89%87
-domain: #领域：cv/nlp/audio/multi-modal/AutoML
-# - cv
-tags: #自定义标签
--
-datasets: #关联数据集
-  evaluation:
-  #- iic/ICDAR13_HCTR_Dataset
-  test:
-  #- iic/MTWI
-  train:
-  #- iic/SIBR
-models: #关联模型
-#- iic/ofa_ocr-recognition_general_base_zh
+# Qwen2.5 Omni实时API演示项目
 
-## 启动文件(若SDK为Gradio/Streamlit，默认为app.py, 若为Static HTML, 默认为index.html)
-# deployspec:
-#   entry_file: app.py
-license: Apache License 2.0
----
-#### Clone with HTTP
+本项目展示如何使用Qwen2.5 Omni模型的实时API进行语音交互。包含完整的语音识别、处理和合成功能。
+
+## 项目特点
+- 实时语音交互
+- 支持多种语音模式（Chelsie, Serena, Ethan, Cherry）
+- 集成Gradio和FastAPI框架
+- 使用WebSocket进行实时通信
+
+## 安装依赖
 ```bash
- git clone https://www.modelscope.cn/studios/Jz02070540/qwen-2.5-omni-realtime-chat.git
+pip install -r requirements.txt
 ```
-#### 本地运行 需设置环境变量
-```txt
-MODE=UI
+
+## 运行项目
+1. 设置环境变量：
+```bash
+export MODE=UI
 ```
-#### 加载环境变量
+2. 运行项目：
+```bash
+python app.py
+```
+
+## 配置
+在app.py中设置你的API密钥：
 ```python
-load_dotenv(/path/to/.env)
+API_KEY = "Your_API_KEY"
 ```
 
-
+## 文件结构
+- `app.py` - 主程序文件
+- `README.md` - 项目文档
+- `requirements.txt` - 依赖列表
