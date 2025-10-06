@@ -30,9 +30,27 @@ load_dotenv()
 
 cur_dir = Path(__file__).parent
 
-API_KEY = "Your_API_KEY"
-API_URL = "wss://dashscope.aliyuncs.com/api-ws/v1/realtime?model=qwen-omni-turbo-realtime-2025-03-26"
-VOICES = ["Chelsie", "Serena", "Ethan", "Cherry"]
+API_KEY = os.getenv("MODELSCOPE_API_KEY", "")
+API_URL = "wss://dashscope.aliyuncs.com/api-ws/v1/realtime?model=qwen3-omni-flash-realtime"
+VOICES = {
+    "芊悦": "Cherry",
+    "晨煦": "Ethan",
+    "程川": "Eric",
+    "甜茶": "Ryan",
+    "晓东": "Dylan",
+    "李彼得": "Peter",
+    "阿珍": "Jada",
+    "晴儿": "Sunny",
+    "詹妮弗": "Jennifer",
+    "卡捷琳娜": "Katerina",
+    "老李": "Li",
+    "墨讲师": "Elias",
+    "秦川": "Marcus",
+    "阿清": "Kiki",
+    "阿强": "Rocky",
+    "阿杰": "Roy",
+}
+
 headers = {"Authorization": "Bearer " + API_KEY}
 
 
@@ -56,7 +74,7 @@ class QwenOmniHandler(AsyncStreamHandler):
     async def start_up(self):
         try:
             await self.wait_for_args()
-            voice_id = self.latest_args[1]
+            voice_id = VOICES[self.latest_args[1]]
             print(voice_id)
 
             async with connect(API_URL, additional_headers=headers) as conn:
@@ -93,7 +111,8 @@ class QwenOmniHandler(AsyncStreamHandler):
                         )
                     if event["type"] == "response.audio.delta":
                         await self.output_queue.put(
-                            (self.output_sample_rate, np.frombuffer(base64.b64decode(event["delta"]), dtype=np.int16).reshape(1, -1))
+                            (self.output_sample_rate,
+                             np.frombuffer(base64.b64decode(event["delta"]), dtype=np.int16).reshape(1, -1))
                         )
 
         except Exception as e:
@@ -135,7 +154,15 @@ def update_chatbot(chatbot: list[dict], response: dict):
 
 
 chatbot = gr.Chatbot(type="messages")
-voice = gr.Dropdown(choices=VOICES, value=VOICES[0], type="value", label="Voice")
+# Replace the current voice dropdown with Chinese display names
+voice_display_names = list(VOICES.keys())
+
+voice = gr.Dropdown(
+    choices=voice_display_names,
+    value=voice_display_names[0],  # Default to "芊悦"
+    type="value", 
+    label="Voice"
+)
 latest_message = gr.Textbox(type="text", visible=False)
 
 # 可选：暂时禁用 TURN 配置进行测试
